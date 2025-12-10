@@ -21,6 +21,7 @@ public class OracleContainerTestBase {
     @BeforeAll
     static void beforeAll() throws SQLException {
         if (System.getenv("ORACLE_JDBC_URL") == null) {
+            System.out.println("Starting container ...");
             container = new OracleContainer(ORACLE_IMAGE_NAME)
                     .withStartupTimeout(Duration.ofSeconds(60 * 20))
                     .withConnectTimeoutSeconds(60 * 20)
@@ -28,9 +29,9 @@ public class OracleContainerTestBase {
                     .withUsername("testuser")
                     .withPassword("testpwd");
             container.start();
-
             initDataSource(DATA_SOURCE, container.getJdbcUrl(), container.getUsername(), container.getPassword());
             initDataSource(SYSDBA_DATA_SOURCE, container.getJdbcUrl(), "sys as sysdba", container.getPassword());
+            System.out.println("Container started.");
         } else {
             initDataSource(
                     DATA_SOURCE,
